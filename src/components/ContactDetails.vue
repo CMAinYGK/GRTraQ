@@ -126,7 +126,8 @@ import { peopleCollection } from "../firebaseConfig";
 export default {
   name: "contact-details",
   props: {
-    passedName: name
+    passedName: name,
+    type: "string"
   },
   data() {
     return {

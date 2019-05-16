@@ -11,7 +11,8 @@ export const store = new Vuex.Store({
     appTitle: "GRTraQ",
     user: null,
     error: null,
-    loading: false
+    loading: false,
+    isAuthenticated: false
   },
   mutations: {
     setUser(state, payload) {
@@ -79,6 +80,11 @@ export const store = new Vuex.Store({
           commit("setError", error.message);
           commit("setLoading", false);
         });
+    },
+    userSignOut({ commit }) {
+      firebase.auth().signOut();
+      commit("setUser", null);
+      router.push("/");
     }
   },
   getters: {

@@ -69,7 +69,7 @@ export default {
   },
   mounted() {
     contactsCollection
-      .where("slug", "==", this.$route.params.contact)
+      .where("slug", "==", this.$route.params.report)
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {

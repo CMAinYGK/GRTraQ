@@ -19,7 +19,7 @@
             <td>
               <router-link
                 class="button is-primary"
-                v-bind:to="{ name: 'report-details', params: { contact: props.item.slug }}"
+                v-bind:to="{ name: 'report-details', params: { report: props.item.slug }}"
               >Details</router-link>
             </td>
             <td class="text-sm-right">{{ props.item.date}}</td>
