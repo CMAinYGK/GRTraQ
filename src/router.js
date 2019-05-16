@@ -1,26 +1,90 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "./views/Home.vue";
+import firebase from "firebase/app";
+
+const routerOptions = [
+  { path: "/", component: "Landing" },
+  { path: "*", component: "NotFound" },
+  { path: "/signin", component: "SignIn" },
+  { path: "/signup", component: "SignUp" },
+  { path: "/home", component: "Home", meta: { requiresAuth: true } },
+  {
+    path: "/reports",
+    name: "ViewReports",
+    component: "ViewReports",
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/new-report",
+    component: "NewReport",
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/ext-contacts",
+    component: "ExtContacts",
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/add-contact",
+    component: "AddNewContact",
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/:person",
+    name: "contact-details",
+    component: "ContactDetails",
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/:report",
+    name: "report-details",
+    component: "ReportDetails",
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/edit/:edit",
+    name: "edit",
+    component: "EditPerson",
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: "Profile",
+    meta: {
+      requiresAuth: true
+    }
+  }
+];
+
+const routes = routerOptions.map(route => {
+  return {
+    ...route,
+    component: () => import(`@/components/${route.component}.vue`)
+  };
+});
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: "history",
-  base: process.env.BASE_URL,
-  routes: [
-    {
-      path: "/",
-      name: "home",
-      component: Home
-    },
-    {
-      path: "/about",
-      name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/About.vue")
-    }
-  ]
+  routes
 });
+
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  const isAuthenticated = firebase.auth().currentUser;
+  if (requiresAuth && !isAuthenticated) {
+    next("/signin");
+  } else {
+    next();
+  }
+});
+
+export default router;

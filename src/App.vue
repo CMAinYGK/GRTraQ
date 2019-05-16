@@ -1,31 +1,104 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
-  </div>
+  <v-app>
+    <v-navigation-drawer v-model="sidebar" app>
+      <v-list>
+        <v-list-tile v-for="item in menuItems" :key="item.title" :to="item.path">
+          <v-list-tile-action>
+            <v-icon>{{item.icon}}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>{{item.title}}</v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile v-if="isAuthenticated" @click="userSignOut">
+          <v-list-tile-action>
+            <v-icon>exit_to_app</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>Sign Out</v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-toolbar app>
+      <span class="hidden-sm-and-up">
+        <v-toolbar-side-icon @click="sidebar = !sidebar"></v-toolbar-side-icon>
+      </span>
+      <v-toolbar-title>
+        <router-link to="/home" tag="span" style="cursor: pointer">{{ appTitle }}</router-link>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
+      <v-toolbar-items class="hidden-xs-only">
+        <v-btn flat v-for="item in menuItems" :key="item.title" :to="item.path">
+          <v-icon left dark>{{item.icon}}</v-icon>
+          {{item.title}}
+        </v-btn>
+        <v-btn flat v-if="isAuthenticated" @click="userSignOut">
+          <v-icon left>exit_to_app</v-icon>Sign Out
+        </v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
+
+    <v-content>
+      <router-view></router-view>
+    </v-content>
+  </v-app>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      sidebar: false
+    };
+  },
+  computed: {
+    appTitle() {
+      return this.$store.state.appTitle;
+    },
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
+    },
+    menuItems() {
+      if (this.isAuthenticated) {
+        return [
+          { title: "Home", path: "/home", component: "Home", icon: "home" },
+          {
+            title: "External Contacts",
+            path: "/ext-contacts",
+            component: "ExtContacts",
+            icon: "person"
+          },
+          {
+            title: "Engagement Reports",
+            path: "/reports",
+            component: "ViewReports",
+            icon: "assignment"
+          }
+        ];
+      } else {
+        return [
+          {
+            title: "Sign Up",
+            path: "/signup",
+            component: "SignUp",
+            icon: "account_circle"
+          },
+          {
+            title: "Sign In",
+            path: "/signin",
+            component: "SignIn",
+            icon: "lock_open"
+          }
+        ];
+      }
+    }
+  },
+  methods: {
+    userSignOut() {
+      this.$store.dispatch("userSignOut");
+    }
+  }
+};
+</script>
+
 <style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
