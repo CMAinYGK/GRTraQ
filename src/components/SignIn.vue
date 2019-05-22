@@ -36,12 +36,16 @@
             </v-flex>
           </v-layout>
         </form>
+        <div>
+          <a>Forgot Password?</a>
+        </div>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
+const fb = require("../firebaseConfig");
 export default {
   data() {
     return {
@@ -52,10 +56,17 @@ export default {
   },
   methods: {
     userSignIn() {
-      this.$store.dispatch("userSignIn", {
-        email: this.email,
-        password: this.password
-      });
+      fb.auth
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then(user => {
+          this.$store.commit("setCurrentUser", user.user);
+          this.$store.commit("setIsAuthenticated", true);
+          this.$store.dispatch("fetchUserProfile");
+          this.$router.replace("/home");
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   computed: {

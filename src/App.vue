@@ -8,7 +8,7 @@
           </v-list-tile-action>
           <v-list-tile-content>{{item.title}}</v-list-tile-content>
         </v-list-tile>
-        <v-list-tile v-if="isAuthenticated" @click="userSignOut">
+        <v-list-tile v-if="currentUser" @click="userSignOut">
           <v-list-tile-action>
             <v-icon>exit_to_app</v-icon>
           </v-list-tile-action>
@@ -31,7 +31,7 @@
           <v-icon left dark>{{item.icon}}</v-icon>
           {{item.title}}
         </v-btn>
-        <v-btn flat v-if="isAuthenticated" @click="userSignOut">
+        <v-btn flat v-if="currentUser" @click="userSignOut">
           <v-icon left>exit_to_app</v-icon>Sign Out
         </v-btn>
       </v-toolbar-items>
@@ -54,11 +54,11 @@ export default {
     appTitle() {
       return this.$store.state.appTitle;
     },
-    isAuthenticated() {
-      return this.$store.getters.isAuthenticated;
+    currentUser() {
+      return this.$store.state.currentUser;
     },
     menuItems() {
-      if (this.isAuthenticated) {
+      if (this.currentUser) {
         return [
           { title: "Home", path: "/home", component: "Home", icon: "home" },
           {

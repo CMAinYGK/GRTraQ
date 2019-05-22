@@ -52,7 +52,7 @@ export default {
       search: "",
       items: [],
       pagination: {
-        sortBy: "levelOfGov"
+        sortBy: "name"
       },
       selected: [],
       headers: [
@@ -60,10 +60,10 @@ export default {
         {
           text: "Name",
           align: "center",
-          sortable: true
-          // value: "name"
+          sortable: true,
+          value: "name"
         },
-        { text: "Title", value: "title", align: "right", sortable: true },
+        { text: "Title", value: "title", align: "right", sortable: false },
         {
           text: "Level of Government",
           value: "levelOfGov",
@@ -76,7 +76,7 @@ export default {
   },
   mounted() {
     peopleCollection
-      .orderBy("name")
+      .orderBy("name", "desc")
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {

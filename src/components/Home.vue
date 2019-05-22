@@ -2,13 +2,13 @@
   <v-container fluid>
     <vue-headful title="GRTraQ"/>
     <v-app id="main">
-      <v-flex xs9 sm4 offset-xs3 offset-sm8>
+      <v-flex xs9 sm4 offset-xs3 offset-sm7>
         <br>
-        <!-- <v-card>
-          <p>The current user is {{user}}</p>
-          <router-link v-bind:to="{ name: 'profile'}">Edit Person</router-link>
+        <v-card>
+          <p>The current user is {{this.$store.state.userProfile.name}}</p>
+          <!-- <router-link v-bind:to="{ name: 'profile'}">View Profile</router-link> -->
         </v-card>
-        <br>-->
+        <br>
 
         <v-card>
           <h2 class="text-xs-left">Helpful Links</h2>

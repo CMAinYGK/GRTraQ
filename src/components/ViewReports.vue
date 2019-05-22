@@ -14,7 +14,12 @@
           <v-spacer></v-spacer>
           <v-spacer></v-spacer>
         </v-card-title>
-        <v-data-table :headers="headers" :items="items" class="elevation-1">
+        <v-data-table
+          :headers="headers"
+          :items="items"
+          :pagination.sync="pagination"
+          class="elevation-1"
+        >
           <template v-slot:items="props">
             <td>
               <router-link
@@ -43,8 +48,7 @@
 </template>
 
 <script>
-
-import { contactsCollection } from '../firebaseConfig';
+import { contactsCollection } from "../firebaseConfig";
 
 export default {
   name: "ViewReports",
@@ -53,6 +57,10 @@ export default {
     return {
       items: [],
       search: "",
+      pagination: {
+        sortBy: "date",
+        descending: true
+      },
       headers: [
         { text: "More Info", align: "right", sortable: false },
         {

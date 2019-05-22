@@ -2,7 +2,16 @@
   <v-container fluid>
     <v-flex xs12 sm4 offset-sm4>
       <h1>Profile</h1>
-      <v-flex xs12 sm2 offset-sm2></v-flex>
+      <v-flex v-for="(users, idx) in items" :key="idx">
+        <p>
+          <strong>User Name:</strong>
+          {{users.name}}
+        </p>
+        <p>
+          <strong>Title:</strong>
+          {{users.title}}
+        </p>
+      </v-flex>
     </v-flex>
   </v-container>
 </template>
@@ -13,26 +22,12 @@ export default {
   name: "profile",
   data() {
     return {
-      items: {},
-      userName: "",
-      avatar: "",
-      isAdmin: false
+      items: []
     };
   },
-  // computed: {
-  //   email() {
-  //     return this.$store.state.user.email;
-  //   },
-  //   userName() {
-  //     return this.$store.state.user.userName;
-  //   },
-  //   avatar() {
-  //     return this.$store.state.user.avatar;
-  //   }
-  // },
   mounted() {
     usersCollection
-      .where("email", "==", this.$store.state.user)
+      .doc(user.uid)
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
@@ -45,15 +40,6 @@ export default {
           this.items.push(data);
         });
       });
-  },
-  methods: {
-    userUpdate() {
-      this.$store.dispatch("userUpdate", {
-        userName: this.userName,
-        avatar: this.avatar,
-        isAdmin: this.isAdmin
-      });
-    }
   }
 };
 </script>

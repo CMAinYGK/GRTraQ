@@ -54,16 +54,15 @@
 </template>
 
 <script>
+const fb = require("../firebaseConfig");
 export default {
   data() {
     return {
       name: "",
       email: "",
       password: "",
+
       passwordConfirm: "",
-      isAdmin: false,
-      isMgmt: false,
-      isExt: false,
       alert: false
     };
   },
@@ -85,26 +84,28 @@ export default {
       if (this.comparePasswords !== true) {
         return;
       }
-      this.$store.dispatch("userSignUp", {
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        isAdmin: this.isAdmin,
-        isMgmt: this.isMgmt,
-        isExt: this.isExt
-      });
-    }
-  },
-  watch: {
-    error(value) {
-      if (value) {
-        this.alert = true;
-      }
-    },
-    alert(value) {
-      if (!value) {
-        this.$store.commit("setError", null);
-      }
+      fb.auth
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then(user => {
+          this.$store.commit("setCurrentUser", user);
+          this.$store.commit("setIsAuthenticated", true);
+          console.log(user.user.uid);
+
+          // create user obj
+          fb.usersCollection
+            .doc(user.user.uid)
+            .set({
+              name: this.name,
+              email: this.email
+            })
+            .then(() => {
+              this.$store.dispatch("fetchUserProfile");
+              this.$router.replace("/home");
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        });
     }
   }
 };
