@@ -25,6 +25,11 @@ const routerOptions = [
     meta: { requiresAuth: true }
   },
   {
+    path: "/test-report",
+    component: "Test2",
+    meta: { requiresAuth: true }
+  },
+  {
     path: "/ext-contacts",
     component: "ExtContacts",
     meta: { requiresAuth: true }
