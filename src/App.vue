@@ -44,6 +44,7 @@
 </template>
 
 <script>
+const fb = require("./firebaseConfig");
 export default {
   data() {
     return {
@@ -94,7 +95,17 @@ export default {
   },
   methods: {
     userSignOut() {
-      this.$store.dispatch("userSignOut");
+      fb.auth
+        .signOut()
+        .then(user => {
+          this.$store.commit("setCurrentUser", null);
+          this.$store.commit("setIsAuthenticated", false);
+          this.$store.commit("setUserProfile", {});
+          this.$router.replace("/");
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };

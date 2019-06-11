@@ -14,13 +14,24 @@
       </v-flex>
       <v-flex xs12 sm6 offset-sm3 class="text-xs-center" mt-5>
         <!-- <v-btn color="primary" to="/signup">Sign Up</v-btn> -->
-        <v-btn to="/signin">Sign In</v-btn>
+        <v-btn v-if="currentUser" color="primary" to="/home">Get Started</v-btn>
+        <v-btn v-else color="primary" to="/signin">Sign In</v-btn>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 <script>
-export default {};
+export default {
+  name: "landing",
+  computed: {
+    appTitle() {
+      return this.$store.state.appTitle;
+    },
+    currentUser() {
+      return this.$store.state.currentUser;
+    }
+  }
+};
 </script>
 
 <style>

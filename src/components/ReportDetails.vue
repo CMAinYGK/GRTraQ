@@ -4,40 +4,16 @@
     <v-flex xs-12 class="text-xs-center" v-for="(contact, idx) in items" :key="idx">
       <h1>Contact Report for {{contact.date}}</h1>
       <br>
-
-      <p>
-        <strong>Contact:</strong>
-        {{ contact.name }}
+      <span v-for="(attendee, index) in contact.attendees" :key="index">
+        <strong>{{ contact.attendees[index].name}}</strong>
+        - {{contact.attendees[index].title}}, {{contact.attendees[index].department}}
         <br>
-        {{contact.title}} - {{contact.department}}
-      </p>
-
-      <p v-if="contact.name2 && contact.title2 && contact.department2">
-        <strong>Contact:</strong>
-        {{ contact.name2 }}
-        <br>
-        {{contact.title2}} - {{contact.department2}}
-      </p>
-
-      <p v-if="contact.name3 && contact.title3 && contact.department3">
-        <strong>Contact:</strong>
-        {{ contact.name3 }}
-        <br>
-        {{contact.title3}} - {{contact.department3}}
-      </p>
-
-      <p v-if="contact.name4 && contact.title4 && contact.department4">
-        <strong>Contact:</strong>
-        {{ contact.name4 }}
-        <br>
-        {{contact.title4}} - {{contact.department4}}
-      </p>
+      </span>
       <br>
       <p>
         <strong>Engagement Type:</strong>
         {{ contact.selectedType }}
       </p>
-
       <br>
       <p>
         <strong>Internal Alignment:</strong>
@@ -52,8 +28,6 @@
       <br>
       <label>Meeting Notes</label>
       <div class="notes">{{contact.message}}</div>
-
-      <p>{{contact.attendees}}</p>
     </v-flex>
   </v-container>
 </template>
@@ -74,6 +48,7 @@ export default {
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
           let data = {
+            attendees: doc.data().attendees,
             name: doc.data().name,
             title: doc.data().title,
             department: doc.data().department,

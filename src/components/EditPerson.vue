@@ -246,21 +246,7 @@ export default {
               alum: this.editUser.alum,
               levelOfGov: this.editUser.levelOfGov,
               caucus: this.editUser.caucus,
-              addressType: this.editUser.addressType,
-              streetaddress: this.editUser.streetaddress,
-              city: this.editUser.city,
-              province: this.editUser.province,
-              postal: this.editUser.postal,
-              phone: this.editUser.phone,
-              cell: this.editUser.cell,
-              email: this.editUser.email,
-              addressType2: this.editUser.addressType2,
-              streetaddress2: this.editUser.streetaddress2,
-              city2: this.editUser.city2,
-              province2: this.editUser.province2,
-              postal2: this.editUser.postal2,
-              phone2: this.editUser.phone2,
-              email2: this.editUser.email2,
+              addresses: this.editUser.addresses,
               website: this.editUser.website,
               twitter: this.editUser.twitter,
               fb: this.editUser.fb,
@@ -279,14 +265,6 @@ export default {
             alert("Oops. " + err.message);
           }
         );
-    },
-    computed: {
-      error() {
-        return this.$store.state.error;
-      },
-      loading() {
-        return this.$store.state.loading;
-      }
     }
   }
 };

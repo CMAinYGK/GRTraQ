@@ -28,61 +28,66 @@
         <v-select :items="selectOptionsOne" label="Level of Government?" v-model="levelOfGov"></v-select>
         <v-select :items="selectOptionsTwo" label="Caucus Membership" v-model="caucus"></v-select>
         <br>
+
         <h3>Addresses</h3>
-        <v-layout flex justify-space-between>
-          <v-flex xs12 sm6>
-            <v-text-field label="Address Type" v-model="addressType"></v-text-field>
+        <v-layout row wrap>
+          <v-flex xs12 sm8>
+            <v-btn @click="plusAddress">Add Address</v-btn>
+          </v-flex>
+          <v-flex xs6 v-for="(address, index) in addresses" :key="index">
+            <v-text-field
+              label="Address Type"
+              name="addresses[][addressType]"
+              v-model="address.addressType"
+            ></v-text-field>
             <v-text-field
               label="Street Address"
               prepend-inner-icon="business"
-              v-model="streetaddress"
+              v-model="address.streetaddress"
+              name="addresses[][streetaddress]"
             ></v-text-field>
-            <v-text-field label="City" prepend-inner-icon="pin_drop" v-model="city"></v-text-field>
-            <v-text-field label="Province" prepend-inner-icon="pin_drop" v-model="province"></v-text-field>
+            <v-text-field
+              label="City"
+              prepend-inner-icon="pin_drop"
+              name="addresses[][city]"
+              v-model="address.city"
+            ></v-text-field>
+            <v-text-field
+              label="Province"
+              prepend-inner-icon="pin_drop"
+              name="addresses[][province]"
+              v-model="address.province"
+            ></v-text-field>
             <v-text-field
               label="Postal Code"
+              name="addresses[][postal]"
               prepend-inner-icon="pin_drop"
               placeholder="A1A 1A1"
-              v-model="postal"
+              v-model="address.postal"
             ></v-text-field>
             <v-text-field
               label="Phone"
+              name="addresses[][phone]"
               placeholder="111-111-1111"
               prepend-inner-icon="contact_phone"
-              v-model="phone"
+              v-model="address.phone"
             ></v-text-field>
-            <v-text-field label="E-Mail" prepend-inner-icon="contact_mail" v-model="email"></v-text-field>
+            <v-text-field
+              label="E-Mail"
+              prepend-inner-icon="contact_mail"
+              name="addresses[][email]"
+              v-model="address.email"
+            ></v-text-field>
             <v-text-field
               label="Cell"
+              name="addresses[][cell]"
               placeholder="111-111-1111"
               prepend-inner-icon="stay_primary_portrait"
-              v-model="cell"
+              v-model="address.cell"
             ></v-text-field>
+            <v-btn @click="minusAddress(index)">Remove</v-btn>
           </v-flex>
-
-          <v-flex xs12 sm6 offset-xs1>
-            <v-text-field label="Second Address Type" v-model="addressType2"></v-text-field>
-            <v-text-field
-              label="Street Address"
-              prepend-inner-icon="business"
-              v-model="streetaddress2"
-            ></v-text-field>
-            <v-text-field label="City" prepend-inner-icon="pin_drop" v-model="city2"></v-text-field>
-            <v-text-field label="Province" prepend-inner-icon="pin_drop" v-model="province2"></v-text-field>
-            <v-text-field
-              label="Postal Code"
-              prepend-inner-icon="pin_drop"
-              placeholder="A1A 1A1"
-              v-model="postal2"
-            ></v-text-field>
-            <v-text-field
-              label="Phone"
-              placeholder="111-111-1111"
-              prepend-inner-icon="contact_phone"
-              v-model="phone2"
-            ></v-text-field>
-            <v-text-field label="E-Mail" prepend-inner-icon="contact_mail" v-model="email2"></v-text-field>
-          </v-flex>
+          <br>
         </v-layout>
         <br>
         <v-text-field label="Website" prepend-inner-icon="fa-window-maximize" v-model="website"></v-text-field>
@@ -104,6 +109,7 @@
 
 <script>
 import { peopleCollection } from "../firebaseConfig";
+import Vue from "vue";
 
 export default {
   name: "new-contact",
@@ -116,21 +122,17 @@ export default {
       alum: "",
       levelOfGov: "",
       caucus: "",
-      addressType: "",
-      streetaddress: "",
-      city: "",
-      province: "",
-      postal: "",
-      phone: "",
-      cell: "",
-      email: "",
-      addressType2: "",
-      streetaddress2: "",
-      city2: "",
-      province2: "",
-      postal2: "",
-      phone2: "",
-      email2: "",
+      addresses: [],
+      address: {
+        addressType: "",
+        streetaddress: "",
+        city: "",
+        province: "",
+        postal: "",
+        phone: "",
+        cell: "",
+        email: ""
+      },
       website: "",
       twitter: "",
       fb: "",
@@ -160,6 +162,12 @@ export default {
     };
   },
   methods: {
+    plusAddress() {
+      this.addresses.push(Vue.util.extend({}, this.address));
+    },
+    minusAddress(index) {
+      Vue.delete(this.addresses, index);
+    },
     addNewContact() {
       peopleCollection
         .add({
@@ -170,21 +178,7 @@ export default {
           alum: this.alum,
           levelOfGov: this.levelOfGov,
           caucus: this.caucus,
-          addressType: this.addressType,
-          streetaddress: this.streetaddress,
-          city: this.city,
-          province: this.province,
-          postal: this.postal,
-          phone: this.phone,
-          cell: this.cell,
-          email: this.email,
-          addressType2: this.addressType2,
-          streetaddress2: this.streetaddress2,
-          city2: this.city2,
-          province2: this.province2,
-          postal2: this.postal2,
-          phone2: this.phone2,
-          email2: this.email2,
+          addresses: this.addresses,
           website: this.website,
           twitter: this.twitter,
           fb: this.fb,

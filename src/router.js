@@ -20,16 +20,6 @@ const routerOptions = [
     meta: { requiresAuth: true }
   },
   {
-    path: "/test",
-    component: "TestNewComponent",
-    meta: { requiresAuth: true }
-  },
-  {
-    path: "/test-report",
-    component: "Test2",
-    meta: { requiresAuth: true }
-  },
-  {
     path: "/ext-contacts",
     component: "ExtContacts",
     meta: { requiresAuth: true }
@@ -40,7 +30,7 @@ const routerOptions = [
     meta: { requiresAuth: true }
   },
   {
-    path: "/:person",
+    path: "contact-profile/:person",
     name: "contact-details",
     component: "ContactDetails",
     meta: {
@@ -48,7 +38,7 @@ const routerOptions = [
     }
   },
   {
-    path: "/:report",
+    path: "contact-event/:report",
     name: "report-details",
     component: "ReportDetails",
     meta: {

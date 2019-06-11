@@ -29,13 +29,10 @@
             </td>
             <td class="text-sm-right">{{ props.item.date}}</td>
             <td class="text-sm-right">
-              {{ props.item.name3 }}
-              <br>
-              {{ props.item.name }}
-              <br>
-              {{ props.item.name2 }}
-              <br>
-              {{ props.item.name4 }}
+              <span v-for="(attendee, index) in props.item.attendees" :key="index">
+                {{ props.item.attendees[index].name}}
+                <br>
+              </span>
             </td>
             <td class="text-sm-right">{{ props.item.selectedType }}</td>
             <td class="text-sm-right">{{ props.item.selectedExt }}</td>
@@ -72,7 +69,7 @@ export default {
         {
           text: "External Contacts",
           align: "right",
-          value: "name, name2, name3, name4"
+          value: "extAttendees"
         },
 
         { text: "Contact Type", align: "right", value: "selectedType" },
@@ -92,10 +89,7 @@ export default {
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
           let data = {
-            name: doc.data().name,
-            name2: doc.data().name2,
-            name3: doc.data().name3,
-            name4: doc.data().name4,
+            attendees: doc.data().attendees,
             date: doc.data().date,
             QAttend: doc.data().QAttend,
             selectedType: doc.data().selectedType,

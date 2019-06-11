@@ -5,7 +5,7 @@
       <h1>New Contact Report</h1>
       <br>
       <v-flex sm8 offset-sm2>
-        <p>Track meetings involving up to four external contacts. For more than four, please use the notes section below to list additional attendees.</p>
+        <p>Track meetings or engagements involving external contacts.</p>
       </v-flex>
 
       <v-form @submit.prevent="newReport">
@@ -13,34 +13,36 @@
           <v-text-field label="date" type="date" placeholder="date" v-model="date"></v-text-field>
         </v-flex>
 
-        <v-layout row justify-space-around>
-          <v-flex xs12 sm5>
-            <v-text-field label="Name" placeholder="Full Name" v-model="name" required></v-text-field>
-            <v-text-field label="Title" placeholder="Title" v-model="title" required></v-text-field>
-            <v-text-field label="Department" placeholder="Department" v-model="department" required></v-text-field>
+        <v-layout row wrap>
+          <v-flex xs12>
+            <v-btn @click="plusAttendee">Add Attendees</v-btn>
           </v-flex>
-
-          <v-flex xs12 sm5>
-            <v-text-field label="Second Person Name" placeholder="Full Name" v-model="name2"></v-text-field>
-            <v-text-field label="Title" placeholder="Title" v-model="title2"></v-text-field>
-            <v-text-field label="Department" placeholder="Department" v-model="department2"></v-text-field>
+          <v-flex xs12 sm6 offset-sm3 v-for="(extAttendee, index) in extAttendees" :key="index">
+            <v-btn @click="minusAttendee(index)">Remove</v-btn>
+            <v-text-field
+              label="Name"
+              name="extAttendees[][name]"
+              placeholder="Full Name"
+              v-model="extAttendee.name"
+              required
+            ></v-text-field>
+            <v-text-field
+              label="Title"
+              name="extAttendees[][title]"
+              placeholder="Title"
+              v-model="extAttendee.title"
+              required
+            ></v-text-field>
+            <v-text-field
+              label="Department"
+              name="extAttendees[][department]"
+              placeholder="Department"
+              v-model="extAttendee.department"
+              required
+            ></v-text-field>
           </v-flex>
         </v-layout>
-        <v-btn type="button" v-if="isHidden" v-on:click="isHidden = !isHidden">Add more</v-btn>
-        <div v-if="!isHidden">
-          <v-layout row justify-space-around>
-            <v-flex xs12 sm5>
-              <v-text-field label="Third Person Name" placeholder="Full Name" v-model="name3"></v-text-field>
-              <v-text-field label="Title" placeholder="Title" v-model="title3"></v-text-field>
-              <v-text-field label="Department" placeholder="Department" v-model="department3"></v-text-field>
-            </v-flex>
-            <v-flex xs12 sm5>
-              <v-text-field label="Fourth Person Name" placeholder="Full Name" v-model="name4"></v-text-field>
-              <v-text-field label="Title" placeholder="Title" v-model="title4"></v-text-field>
-              <v-text-field label="Department" placeholder="Department" v-model="department4"></v-text-field>
-            </v-flex>
-          </v-layout>
-        </div>
+
         <v-flex xs12 sm6 offset-sm3>
           <v-text-field label="Queen's Attendees" v-model="QAttend"></v-text-field>
         </v-flex>
@@ -67,23 +69,18 @@
 
 <script>
 import { contactsCollection } from "../firebaseConfig";
+import Vue from "vue";
 
 export default {
   name: "contact-report",
   data() {
     return {
-      name: "",
-      title: "",
-      department: "",
-      name2: "",
-      title2: "",
-      department2: "",
-      name3: "",
-      title3: "",
-      department3: "",
-      name4: "",
-      title4: "",
-      department4: "",
+      extAttendee: {
+        name: "",
+        title: "",
+        department: ""
+      },
+      extAttendees: [],
       date: "",
       QAttend: "",
       selectedType: "",
@@ -97,6 +94,7 @@ export default {
         "Meeting",
         "Event - External",
         "Event - Internal",
+        "Event - Visibility",
         "Other (Please Specify in Notes)"
       ],
       selectInt: [
@@ -122,21 +120,16 @@ export default {
     };
   },
   methods: {
+    plusAttendee() {
+      this.extAttendees.push(Vue.util.extend({}, this.extAttendee));
+    },
+    minusAttendee(index) {
+      Vue.delete(this.extAttendees, index);
+    },
     newReport() {
       contactsCollection
         .add({
-          name: this.name,
-          title: this.title,
-          department: this.department,
-          name2: this.name2,
-          title2: this.title2,
-          department2: this.department2,
-          name3: this.name3,
-          title3: this.title3,
-          department3: this.department3,
-          name4: this.name4,
-          title4: this.title4,
-          department4: this.department4,
+          attendees: this.extAttendees,
           date: this.date,
           QAttend: this.QAttend,
           selectedType: this.selectedType,
