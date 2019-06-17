@@ -7,6 +7,7 @@ const routerOptions = [
   { path: "*", component: "NotFound" },
   { path: "/signin", component: "SignIn" },
   { path: "/signup", component: "SignUp" },
+  { path: "/password-reset", component: "PasswordReset" },
   { path: "/home", component: "Home", meta: { requiresAuth: true } },
   {
     path: "/reports",

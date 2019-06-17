@@ -20,12 +20,13 @@
           <p>{{people.alum}}</p>
           <h3>{{people.title}} - {{people.department}}</h3>
           <p>{{people.caucus}}</p>
-          <!-- <router-link v-bind:to="{ name: 'edit', params: { edit: people.slug }}">Edit Person</router-link> -->
         </v-flex>
       </v-layout>
       <br>
-
-      <br>
+      <!-- <span v-if="this.$store.state.userProfile.name == 'Chris Moffatt Armes'">
+        <router-link v-bind:to="{ name: 'edit', params: { edit: people.slug }}">Edit Person</router-link>
+      </span>
+      <br>-->
       <v-expansion-panel focusable>
         <v-expansion-panel-content>
           <template v-slot:header>
@@ -117,11 +118,11 @@ export default {
   components: {
     ViewReports
   },
-  computed: {
-    user() {
-      return this.$store.state.user;
-    }
-  },
+  // computed: {
+  //   user() {
+  //     return this.$store.state.user;
+  //   }
+  // },
   mounted() {
     peopleCollection
       .where("slug", "==", this.$route.params.person)

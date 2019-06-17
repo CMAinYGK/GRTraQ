@@ -32,72 +32,64 @@
         <v-select :items="selectOptionsTwo" label="Caucus Membership" v-model="editUser.caucus"></v-select>
         <br>
         <h3>Addresses</h3>
-        <v-layout flex justify-space-between>
-          <v-flex xs12 sm6>
-            <v-text-field label="Address Type" v-model="editUser.addressType"></v-text-field>
-            <v-text-field
-              label="Street Address"
-              prepend-inner-icon="business"
-              v-model="editUser.streetaddress"
-            ></v-text-field>
-            <v-text-field label="City" prepend-inner-icon="pin_drop" v-model="editUser.city"></v-text-field>
-            <v-text-field
-              label="Province"
-              prepend-inner-icon="pin_drop"
-              v-model="editUser.province"
-            ></v-text-field>
-            <v-text-field
-              label="Postal Code"
-              prepend-inner-icon="pin_drop"
-              placeholder="A1A 1A1"
-              v-model="editUser.postal"
-            ></v-text-field>
-            <v-text-field
-              label="Phone"
-              placeholder="111-111-1111"
-              prepend-inner-icon="contact_phone"
-              v-model="editUser.phone"
-            ></v-text-field>
-            <v-text-field label="E-Mail" prepend-inner-icon="contact_mail" v-model="editUser.email"></v-text-field>
-            <v-text-field
-              label="Cell"
-              placeholder="111-111-1111"
-              prepend-inner-icon="stay_primary_portrait"
-              v-model="editUser.cell"
-            ></v-text-field>
+        <v-layout row wrap>
+          <v-flex xs12 sm8>
+            <v-btn @click="plusAddress">Add Address</v-btn>
           </v-flex>
-
-          <v-flex xs12 sm6 offset-xs1>
-            <v-text-field label="Second Address Type" v-model="editUser.addressType2"></v-text-field>
+          <v-flex xs6 v-for="(address, index) in editUser.addresses" :key="index">
+            <v-text-field
+              label="Address Type"
+              name="addresses[][addressType]"
+              v-model="editUser.address.addressType"
+            ></v-text-field>
             <v-text-field
               label="Street Address"
               prepend-inner-icon="business"
-              v-model="editUser.streetaddress2"
+              v-model="editUser.address.streetaddress"
+              name="addresses[][streetaddress]"
             ></v-text-field>
-            <v-text-field label="City" prepend-inner-icon="pin_drop" v-model="editUser.city2"></v-text-field>
+            <v-text-field
+              label="City"
+              prepend-inner-icon="pin_drop"
+              name="addresses[][city]"
+              v-model="editUser.address.city"
+            ></v-text-field>
             <v-text-field
               label="Province"
               prepend-inner-icon="pin_drop"
-              v-model="editUser.province2"
+              name="addresses[][province]"
+              v-model="editUser.address.province"
             ></v-text-field>
             <v-text-field
               label="Postal Code"
+              name="addresses[][postal]"
               prepend-inner-icon="pin_drop"
               placeholder="A1A 1A1"
-              v-model="editUser.postal2"
+              v-model="editUser.address.postal"
             ></v-text-field>
             <v-text-field
               label="Phone"
+              name="addresses[][phone]"
               placeholder="111-111-1111"
               prepend-inner-icon="contact_phone"
-              v-model="editUser.phone2"
+              v-model="editUser.address.phone"
             ></v-text-field>
             <v-text-field
               label="E-Mail"
               prepend-inner-icon="contact_mail"
-              v-model="editUser.email2"
+              name="addresses[][email]"
+              v-model="editUser.address.email"
             ></v-text-field>
+            <v-text-field
+              label="Cell"
+              name="addresses[][cell]"
+              placeholder="111-111-1111"
+              prepend-inner-icon="stay_primary_portrait"
+              v-model="editUser.address.cell"
+            ></v-text-field>
+            <v-btn @click="minusAddress(index)">Remove</v-btn>
           </v-flex>
+          <br>
         </v-layout>
         <br>
         <v-text-field
@@ -136,7 +128,7 @@
 
 <script>
 import { peopleCollection } from "../firebaseConfig";
-
+import Vue from "vue";
 export default {
   name: "edit",
   data() {
@@ -150,21 +142,17 @@ export default {
         alum: "",
         levelOfGov: "",
         caucus: "",
-        addressType: "",
-        streetaddress: "",
-        city: "",
-        province: "",
-        postal: "",
-        phone: "",
-        cell: "",
-        email: "",
-        addressType2: "",
-        streetaddress2: "",
-        city2: "",
-        province2: "",
-        postal2: "",
-        phone2: "",
-        email2: "",
+        addresses: [],
+        address: {
+          addressType: "",
+          streetaddress: "",
+          city: "",
+          province: "",
+          postal: "",
+          phone: "",
+          cell: "",
+          email: ""
+        },
         website: "",
         twitter: "",
         fb: "",
@@ -206,21 +194,7 @@ export default {
             (this.editUser.alum = doc.data().alum),
             (this.editUser.levelOfGov = doc.data().levelOfGov),
             (this.editUser.caucus = doc.data().caucus),
-            (this.editUser.addressType = doc.data().addressType),
-            (this.editUser.streetaddress = doc.data().streetaddress),
-            (this.editUser.city = doc.data().city),
-            (this.editUser.province = doc.data().province),
-            (this.editUser.postal = doc.data().postal),
-            (this.editUser.phone = doc.data().phone),
-            (this.editUser.cell = doc.data().cell),
-            (this.editUser.email = doc.data().email),
-            (this.editUser.addressType2 = doc.data().addressType2),
-            (this.editUser.streetaddress2 = doc.data().streetaddress2),
-            (this.editUser.city2 = doc.data().city2),
-            (this.editUser.province2 = doc.data().province2),
-            (this.editUser.postal2 = doc.data().postal2),
-            (this.editUser.phone2 = doc.data().phone2),
-            (this.editUser.email2 = doc.data().email2),
+            (this.editUser.addresses = doc.data().addresses),
             (this.editUser.website = doc.data().website),
             (this.editUser.twitter = doc.data().twitter),
             (this.editUser.fb = doc.data().fb),
@@ -232,6 +206,12 @@ export default {
       });
   },
   methods: {
+    plusAddress() {
+      this.editUser.addresses.push(Vue.util.extend({}, this.editUser.address));
+    },
+    minusAddress(index) {
+      Vue.delete(this.editUser.addresses, index);
+    },
     onEdit() {
       peopleCollection
         .where("slug", "==", this.$route.params.edit)

@@ -34,6 +34,13 @@
                 <br>
               </span>
             </td>
+            <td class="text-sm-right">
+              <span
+                v-for="(attendee, index) in props.item.attendees"
+                :key="index"
+              >{{ props.item.attendees[index].department}}</span>
+            </td>
+
             <td class="text-sm-right">{{ props.item.selectedType }}</td>
             <td class="text-sm-right">{{ props.item.selectedExt }}</td>
             <td class="text-sm-right">{{ props.item.selectedSF }}</td>
@@ -64,20 +71,39 @@ export default {
           text: "Date",
           align: "right",
           descending: "true",
-          value: "date"
+          value: "date",
+          sortable: true
         },
         {
           text: "External Contacts",
           align: "right",
-          value: "extAttendees"
+          value: "attendees",
+          sortable: false
+        },
+        {
+          text: "Department",
+          align: "right",
+          value: "department",
+          sortable: false
         },
 
-        { text: "Contact Type", align: "right", value: "selectedType" },
-        { text: "Objectives Alignment", align: "right", value: "selectedExt" },
+        {
+          text: "Contact Type",
+          align: "right",
+          value: "selectedType",
+          sortable: true
+        },
+        {
+          text: "Objectives Alignment",
+          align: "right",
+          value: "selectedExt",
+          sortable: true
+        },
         {
           text: "Strategic Framework Alignment",
           align: "right",
-          value: "selectedSF"
+          value: "selectedSF",
+          sortable: true
         }
       ]
     };
